@@ -2,29 +2,22 @@ pipeline {
     agent any
     
     environment {
-        MY_VERSION = "1.23"
+        MY_NAME = "Michael"
     }
-
-    tools {
-        maven 'maven'
-    }
-
     parameters {
-        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
-        booleanParam(name: 'executeTests', defaultValue: true, description: '')
+        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: 'Select version')
+        booleanParam(name: 'executeTests', defaultValue: true, description: 'Please check')
     }
-    
 
     stages {
         stage("build") {
             steps {
-                echo "building the appliccstion... version ${MY_VERSION} - VERSION ${VERSION}"
+                echo "building the appliccstion... My Name is ${MY_NAME} - VERSION ${VERSION}"
             }
         }
-
         stage("test") {
             when {
-                expression {
+                expression {//Only run on dev or master branch
                     env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master'
                 }
             }
@@ -32,7 +25,6 @@ pipeline {
                 echo "testing the applicatio... Test ${executeTests}"
             }
         }
-
         stage("deploy") {
             steps {
                 echo "deploying the application..."
