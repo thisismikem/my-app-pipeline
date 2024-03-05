@@ -12,17 +12,17 @@ pipeline {
     stages {
         stage("build") {
             steps {
-                echo "building the appliccstion... My Name is ${MY_NAME} - VERSION ${VERSION}"
+                echo "building the appliccstion... My Name is ${MY_NAME} - VERSION ${params.VERSION}"
             }
         }
         stage("test") {
             when {
-                expression {//Only run on dev or master branch
-                    env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master'
+                expression {//Only run if executeTests is true
+                    params.executeTests
                 }
             }
             steps {
-                echo "testing the applicatio... Test ${executeTests}"
+                echo "testing the applicatio... Test ${params.executeTests}"
             }
         }
         stage("deploy") {
